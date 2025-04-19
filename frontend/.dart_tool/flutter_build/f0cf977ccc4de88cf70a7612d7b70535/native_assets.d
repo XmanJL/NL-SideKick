@@ -1,0 +1,1 @@
+ /Users/jasper/frontend/.dart_tool/flutter_build/f0cf977ccc4de88cf70a7612d7b70535/native_assets.yaml: 
