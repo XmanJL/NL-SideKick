@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'speech_screen.dart';
+import 'screens/dashboard_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,9 +9,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Voice',
+      title: 'Language Buddy',
       debugShowCheckedModeBanner: false,
-      home: SpeechScreen(),
+      home: DashboardScreen(), //Start with dashboard
     );
   }
 }
