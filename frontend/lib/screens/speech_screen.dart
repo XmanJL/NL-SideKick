@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // ✅ For saving to history
 import 'package:speech_to_text_ultra/speech_to_text_ultra.dart';
 
 class SpeechScreen extends StatefulWidget {
@@ -17,18 +18,31 @@ class _SpeechScreenState extends State<SpeechScreen> {
   bool _wasListening = false;
   bool _hasSaved = false;
 
-  // Text to display
+  // ✅ Method to save the recognized sentence to persistent history
+  Future<void> _saveToHistory(String sentence) async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> existing = prefs.getStringList('challengingWords') ?? [];
+
+    // Add only if it's non-empty and not a duplicate
+    if (sentence.trim().isNotEmpty && !existing.contains(sentence)) {
+      existing.add(sentence.trim());
+      await prefs.setStringList('challengingWords', existing);
+      debugPrint('✅ Saved to history: $sentence');
+    }
+  }
+
+  // Text to display in the main speech bubble
   String get _displayText {
     if (_showListeningPrompt) {
-      return '🎙 Listening...';
+      return 'Listening...';
     } else if (!_isListening && _finalText.isEmpty) {
-      return '🎙 Tap the mic to start speaking';
+      return 'Tap the mic to start speaking';
     } else {
       return '$_finalText $_liveText';
     }
   }
 
-  // Reset current listening state, but NOT saved sentences
+  // Resets live session state (not persistent saved sentence)
   void _reset() {
     setState(() {
       _isListening = false;
@@ -55,7 +69,7 @@ class _SpeechScreenState extends State<SpeechScreen> {
             children: [
               const Spacer(),
 
-              // Display box
+              // Display box showing live/final transcription
               Container(
                 padding: const EdgeInsets.all(16),
                 width: double.infinity,
@@ -82,7 +96,7 @@ class _SpeechScreenState extends State<SpeechScreen> {
 
               const SizedBox(height: 30),
 
-              // Show saved sentence
+              // Show saved sentence below if one exists
               if (_savedSentences.isNotEmpty)
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -97,7 +111,7 @@ class _SpeechScreenState extends State<SpeechScreen> {
                   ),
                 ),
 
-              // Mic button
+              // Speech input widget from speech_to_text_ultra package
               SpeechToTextUltra(
                 ultraCallback: (liveText, finalText, isListening) {
                   if (isListening && !_wasListening) {
@@ -120,9 +134,9 @@ class _SpeechScreenState extends State<SpeechScreen> {
                     _wasListening = isListening;
                   });
 
-                  // ✅ Move this guard to block all future saves immediately
+                  // When user stops talking and we haven't saved yet
                   if (!isListening && !_hasSaved) {
-                    _hasSaved = true; // <-- mark it as saved BEFORE the delay
+                    _hasSaved = true; // Lock to prevent saving again
 
                     Future.delayed(const Duration(milliseconds: 300), () {
                       if (!mounted) return;
@@ -136,7 +150,9 @@ class _SpeechScreenState extends State<SpeechScreen> {
                           _savedSentences = '$resultToSave.';
                         });
 
-                        // ✅ Print only once
+                        // ✅ Save the result into SharedPreferences history
+                        _saveToHistory(_savedSentences);
+
                         debugPrint(
                             '✅ saved_sentence variable now has: $_savedSentences');
                       }
