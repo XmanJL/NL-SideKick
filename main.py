@@ -3,7 +3,7 @@ import os
 from openai import OpenAI, api_key
 import json
 import pyttsx3
-import nltk
+from nltk.tokenize import TweetTokenizer
 import wordfreq
 import ssl
 import time
@@ -22,12 +22,14 @@ def languageHelp(originalSentence, wordCount):
 
     engine = pyttsx3.init()
     amountDefined = int(wordCount)
-
+    tknzr = TweetTokenizer()
     inputSentence = re.sub(r'[^\w\s&&[^\']]','', originalSentence)
+
     inputSentence = re.sub(r'\d','', inputSentence)
 
     print(inputSentence)
-    tokenizedInput = nltk.word_tokenize(inputSentence)
+    tokenizedInput = tknzr.tokenize(inputSentence)
+    print(tokenizedInput)
 
     frequencyList = []
 
@@ -38,8 +40,9 @@ def languageHelp(originalSentence, wordCount):
     hardWordsList = []
 
     for num in range(amountDefined):
-        hardWordsList.append(tokenizedInput[frequencyList.index(min(frequencyList))])
-        frequencyList[frequencyList.index(min(frequencyList))] = 1
+        if tokenizedInput[frequencyList.index(min(frequencyList))] not in hardWordsList:
+            hardWordsList.append(tokenizedInput[frequencyList.index(min(frequencyList))])
+            frequencyList[frequencyList.index(min(frequencyList))] = 1
 
     print(hardWordsList)
     with open("DONOTSTAGE.json", "r") as apiLocation:
@@ -52,7 +55,7 @@ def languageHelp(originalSentence, wordCount):
 
     response = client.responses.create(
         model="gpt-4o",
-        instructions="You are local friend that is helping a friend navigate your home country, you will be given words to define as short and simply as possible.",
+        instructions="DO NOT USE MARKDOWN AT ALL. You are local friend that is helping a friend navigate your home country, you will be given words to define as short and simply as possible.",
         input="In the context of " + originalSentence + ", please define the words" + str(hardWordsList) + "SIMPLY and SHORTEN BUT NOT TOO MUCH and IGNORE NAMES and format it as DEFINED_WORD is DEFINITION",
     )
 
