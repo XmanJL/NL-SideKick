@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
+  static double playbackSpeed = 1.0;
+  static int uncommonWordsCount = 1;
+  static double volume = 0.8;
+
   const SettingsScreen({super.key});
 
   @override
@@ -8,9 +12,9 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  double _playbackSpeed = 1.0;
-  int _uncommonWordsCount = 1;
-  double _volume = 0.8;
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +35,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             Slider(
-              value: _playbackSpeed,
+              value: SettingsScreen.playbackSpeed,
               min: 0.5,
               max: 2.0,
               divisions: 6,
-              label: '${_playbackSpeed.toStringAsFixed(1)}x',
+              label: '${SettingsScreen.playbackSpeed.toStringAsFixed(1)}x',
               onChanged: (value) {
-                setState(() => _playbackSpeed = value);
+                setState(() => SettingsScreen.playbackSpeed = value);
               },
             ),
             const SizedBox(height: 30),
@@ -46,7 +50,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             DropdownButton<int>(
-              value: _uncommonWordsCount,
+              value: SettingsScreen.uncommonWordsCount,
               items: [1, 2, 3]
                   .map((count) => DropdownMenuItem(
                         value: count,
@@ -55,7 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   .toList(),
               onChanged: (value) {
                 if (value != null) {
-                  setState(() => _uncommonWordsCount = value);
+                  setState(() => SettingsScreen.uncommonWordsCount = value);
                 }
               },
             ),
@@ -65,13 +69,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             Slider(
-              value: _volume,
+              value: SettingsScreen.volume,
               min: 0.0,
               max: 1.0,
               divisions: 10,
-              label: '${(_volume * 100).round()}%',
+              label: '${(SettingsScreen.volume * 100).round()}%',
               onChanged: (value) {
-                setState(() => _volume = value);
+                setState(() => SettingsScreen.volume = value);
               },
             ),
           ],
@@ -80,3 +84,4 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 }
+
