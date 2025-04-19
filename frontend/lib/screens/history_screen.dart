@@ -39,14 +39,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Vocabulary History'),
+        title:
+            const Text('History Page', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.teal,
         centerTitle: true,
       ),
       body: _challengingWords.isEmpty
           ? const Center(
               child: Text(
-                'No challenging words yet!',
+                'No challenging sentences yet!',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
             )
@@ -55,9 +56,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   const Text(
-                    'My List of Struggling Vocabs:',
+                    'My List of Struggling Sentences:',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

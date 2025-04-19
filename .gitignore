@@ -34,6 +34,8 @@ env/
 .packages
 build/
 pubspec.lock
+.flutter-plugins-dependencies
+.flutter-plugins
 
 # IDEs and editors
 .idea/

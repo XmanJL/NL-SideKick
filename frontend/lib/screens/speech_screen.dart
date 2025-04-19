@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart'; // For saving to hi
 import 'package:speech_to_text_ultra/speech_to_text_ultra.dart';
 import 'package:just_audio/just_audio.dart';
 import 'settings_screen.dart';
-import 'package:scrollable_text_indicator/scrollable_text_indicator.dart';
 
 class SpeechScreen extends StatefulWidget {
   const SpeechScreen({super.key});
@@ -31,7 +30,6 @@ class _SpeechScreenState extends State<SpeechScreen> {
     final prefs = await SharedPreferences.getInstance();
     final List<String> existing = prefs.getStringList('challengingWords') ?? [];
 
-    // Add only if it's non-empty and not a duplicate
     if (sentence.trim().isNotEmpty && !existing.contains(sentence)) {
       existing.add(sentence.trim());
       await prefs.setStringList('challengingWords', existing);
@@ -39,7 +37,6 @@ class _SpeechScreenState extends State<SpeechScreen> {
     }
   }
 
-  // Text to display in the main speech bubble
   String get _displayText {
     if (_showListeningPrompt) {
       return 'Listening...';
@@ -50,9 +47,6 @@ class _SpeechScreenState extends State<SpeechScreen> {
     }
   }
 
-
-
-  // Resets live session state (not persistent saved sentence)
   void _reset() {
     setState(() {
       _isListening = false;
@@ -60,19 +54,16 @@ class _SpeechScreenState extends State<SpeechScreen> {
       _finalText = '';
       _showListeningPrompt = false;
       _wasListening = false;
-      // _hasSaved stays false until next session
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    List<String> tokenizedString;
-    List<String> truncatedString;
-
     var player1 = AudioPlayer();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lang Bud'),
+        title: const Text('Speech Page', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.teal,
         centerTitle: true,
       ),
@@ -80,7 +71,36 @@ class _SpeechScreenState extends State<SpeechScreen> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Instructional helper box
+              Container(
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(top: 16, bottom: 16),
+                decoration: BoxDecoration(
+                  color: Colors.teal.shade50,
+                  border: Border.all(color: Colors.teal.shade100),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Start receiving live audio input feedback and transcription display',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                        '1. Toggle the microphone icon to start/stop recording.',
+                        style: TextStyle(fontSize: 16)),
+                    Text(
+                        '2. Click "Help Me" to hear interpretation of the least common words.',
+                        style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+              ),
+
               const Spacer(),
 
               // Display box showing live/final transcription
@@ -95,40 +115,41 @@ class _SpeechScreenState extends State<SpeechScreen> {
                   color: Colors.teal.shade100,
                   borderRadius: BorderRadius.circular(16),
                 ),
-
-                  child: SingleChildScrollView(
-                      child: Column(
-                      children:[Text(
-                        _displayText,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black87,
-                        ),
-                        textAlign: TextAlign.center,
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    Text(
+                      _displayText,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black87,
                       ),
-                      SizedBox(height: 70),
-                      ]
-                    )
-                  ),
-            ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                  ]),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
               // Show saved sentence below if one exists
-              const SizedBox(height: 10),
               if (_savedSentences.isNotEmpty)
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  margin: const EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    'Recognized Speech:\n$_savedSentences',
-                    style: const TextStyle(fontSize: 16),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      'Recognized Speech:\n$_savedSentences',
+                      style: const TextStyle(fontSize: 16),
+                    ),
                   ),
                 ),
-
-              const SizedBox(height: 10),
 
               // Speech input widget from speech_to_text_ultra package
               Row(
@@ -156,9 +177,8 @@ class _SpeechScreenState extends State<SpeechScreen> {
                         _wasListening = isListening;
                       });
 
-                      // When user stops talking and we haven't saved yet
                       if (!isListening && !_hasSaved) {
-                        _hasSaved = true; // Lock to prevent saving again
+                        _hasSaved = true;
 
                         Future.delayed(const Duration(milliseconds: 300), () {
                           if (!mounted) return;
@@ -169,37 +189,35 @@ class _SpeechScreenState extends State<SpeechScreen> {
 
                           if (resultToSave.isNotEmpty) {
                             setState(() {
-
                               var spaceCount = 0;
                               var cutOffIndex = -1;
 
-                              for (int i = resultToSave.length - 1; i >= 0; i--){
-
-                                if (resultToSave[i] == ' '){
+                              for (int i = resultToSave.length - 1;
+                                  i >= 0;
+                                  i--) {
+                                if (resultToSave[i] == ' ') {
                                   spaceCount++;
                                 }
-                                if (spaceCount == 30){
+                                if (spaceCount == 30) {
                                   cutOffIndex = i;
                                 }
                               }
-                              if (cutOffIndex != -1){
-
-                                resultToSave = resultToSave.substring(cutOffIndex, resultToSave.length);
-
+                              if (cutOffIndex != -1) {
+                                resultToSave =
+                                    resultToSave.substring(cutOffIndex).trim();
                               }
 
                               _savedSentences = resultToSave;
                             });
 
-                            // Save the result into SharedPreferences history
                             _saveToHistory(_savedSentences);
 
-                            debugPrint('saved_sentence variable now has: $_savedSentences');
+                            debugPrint(
+                                'saved_sentence variable now has: $_savedSentences');
                             debugPrint('*Settings:');
                             debugPrint('Playback Speed: $playback');
                             debugPrint('Number of Uncommon Words: $count');
                             debugPrint('Volume Level: $volume');
-
                           }
 
                           _reset();
@@ -211,17 +229,22 @@ class _SpeechScreenState extends State<SpeechScreen> {
                     startIconColor: Colors.teal,
                     pauseIconColor: Colors.red,
                   ),
-                  const SizedBox(height: 10),
-                  FilledButton(onPressed: () async {
-
-                    await player1.setUrl('http://127.0.0.1:5000/content/$_savedSentences/$count');
-                    player1.setVolume(volume);
-                    player1.setSpeed(playback);
-                    player1.play();
-                  }, child: const Text("Help me"),
-
-
-                  ),
+                  const SizedBox(width: 16),
+                  SizedBox(
+                    width: 160,
+                    height: 50,
+                    child: FilledButton(
+                      onPressed: () async {
+                        await player1.setUrl(
+                            'http://127.0.0.1:5000/content/$_savedSentences/$count');
+                        player1.setVolume(volume);
+                        player1.setSpeed(playback);
+                        player1.play();
+                      },
+                      child:
+                          const Text("Help me", style: TextStyle(fontSize: 18)),
+                    ),
+                  )
                 ],
               ),
             ],
@@ -231,4 +254,3 @@ class _SpeechScreenState extends State<SpeechScreen> {
     );
   }
 }
-

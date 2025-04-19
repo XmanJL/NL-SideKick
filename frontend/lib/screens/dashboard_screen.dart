@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Language Buddy',
+      title: 'SideKick',
       debugShowCheckedModeBanner: false,
       home: const DashboardScreen(),
     );
@@ -27,7 +27,8 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome to Language Buddy!'),
+        title: const Text('Welcome to SideKick!',
+            style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.teal,
         centerTitle: true,
       ),
@@ -49,7 +50,7 @@ class DashboardScreen extends StatelessWidget {
               children: [
                 Align(
                   child: const Text(
-                    'Hello! Ready to start learning?',
+                    'Hey! Ready to start learning?',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 40,
@@ -75,7 +76,7 @@ class DashboardScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 DashboardButton(
                   icon: Icons.book,
-                  label: 'Vocabulary History',
+                  label: 'Sentence History',
                   backgroundColor: Colors.deepPurple,
                   onTap: () {
                     Navigator.push(
@@ -135,7 +136,7 @@ class _DashboardButtonState extends State<DashboardButton> {
       onTap: widget.onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),
-        width: MediaQuery.of(context).size.width * 0.35,
+        width: MediaQuery.of(context).size.width * 0.75,
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           color: _isPressed
