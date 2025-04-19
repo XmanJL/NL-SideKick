@@ -20,7 +20,7 @@ The Dashboard screen has the following options:
 
 ## Project Mechanism
 
-A mobile app designed to help non-native English speakers understand the most challenging aspects of the English language.
+A mobile app designed to help non-native English speakers understand the most challenging vocabulary of the English language.
 
 1. Frontend: The app listens to the user's surroundings and captures the spoken sentence in real time. This sentence is then sent to the backend for analysis.
 
