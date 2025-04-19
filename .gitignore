@@ -29,6 +29,12 @@ env/
 *.ipynb
 .ipynb*
 
+# Dart build output
+.dart_tool/
+.packages
+build/
+pubspec.lock
+
 # IDEs and editors
 .idea/
 .vscode/
