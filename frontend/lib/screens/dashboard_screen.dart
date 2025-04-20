@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:coolapp/screens/history_screen.dart';
-import 'package:coolapp/screens/settings_screen.dart';
+import 'history_screen.dart';
+import 'settings_screen.dart';
 import 'speech_screen.dart';
 
 void main() {

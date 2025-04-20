@@ -1,18 +1,11 @@
-from dotenv import load_dotenv
-import os
-from openai import OpenAI, api_key
+from openai import OpenAI
 import json
 import pyttsx3
 from nltk.tokenize import TweetTokenizer
-import wordfreq
-import ssl
-import time
 from flask import Flask
 from flask import send_file
 import re
-from threading import Lock
 from wordfreq import word_frequency
-from pydub import AudioSegment
 from gtts import gTTS
 app = Flask(__name__)
 

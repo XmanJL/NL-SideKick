@@ -386,13 +386,13 @@
       "languageVersion": "3.3"
     },
     {
-      "name": "coolapp",
+      "name": "sidekick",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2025-04-19T19:52:34.393681Z",
+  "generated": "2025-04-20T01:40:26.321913Z",
   "generator": "pub",
   "generatorVersion": "3.5.3",
   "flutterRoot": "file:///Users/jasper/Documents/FlutterSDK/flutter",
