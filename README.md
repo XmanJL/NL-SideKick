@@ -5,7 +5,7 @@ Presented by the Team 16: <mark>The No Lives</mark>
 - **Team Member**: Rickey Ho, Jasper Liu, Jason Lin
 - **3-min Demo Link**: https://www.youtube.com/watch?v=7BJlrtXhuGs
 
-**Inspiration**: As a multilingual speaker, I often find it frustrating to keep up with lectures, especially when professors throw around technical jargons. Even in casual conversations, I sometimes feel awkward when I can’t recognize higher-level vocabulary used by my friends. Like me, many nonnative speakers have been experiencing this. According to the [Kaiser Family Foundation survey](https://www.kff.org/racial-equity-and-health-policy/poll-finding/language-barriers-in-health-care-findings-from-the-kff-survey-on-racism-discrimination-and-health/), 26 million U.S. residents have limited English proficiency, representing about 8% of people ages 5 and older. That’s why our team built this app — as a set of training wheels to help bridge the gap in understanding and make communication smoother and more confident for non-native English speakers.
+**Inspiration**: As a multilingual speaker, I often find it frustrating to keep up with lectures, especially when professors throw around technical jargons. Even in casual conversations, I sometimes feel awkward when I can’t recognize higher-level vocabulary used by my friends. Like me, many nonnative speakers have been experiencing this. According to the [Kaiser Family Foundation survey](https://www.kff.org/racial-equity-and-health-policy/poll-finding/language-barriers-in-health-care-findings-from-the-kff-survey-on-racism-discrimination-and-health/), 26 million U.S. residents have limited English proficiency, representing about 8% of people ages 5 and older. 
 
 ## Project Features
 
